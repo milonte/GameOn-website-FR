@@ -13,9 +13,13 @@ const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
 const closeModalBtn = document.querySelector(".close");
 const formInputs = document.querySelectorAll(".text-control");
-const errorMessages = document.querySelectorAll(".error-message");
 
-// errors messages
+const firstNameInput = document.getElementById("first");
+const lastNameInput = document.getElementById("last");
+const emailInput = document.getElementById("email");
+const birthdateInput = document.getElementById("birthdate");
+const quantityInput = document.getElementById("quantity");
+
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -36,9 +40,9 @@ function validate() {
   let validation = true;
 
   // clear all errors messages before check
-  errorMessages.forEach(message => {
-    message.innerHTML = "";
-  });
+  document.querySelectorAll(".error-message").forEach(elt => {
+    elt.parentNode.removeChild(elt);
+  })
 
   // clear input borders before check
   formInputs.forEach(form => {
@@ -46,66 +50,72 @@ function validate() {
   })
 
   // check first name length
-  if (!checkValueLength(formInputs[0].value, 2)) {
+  if (!checkValueLength(firstNameInput.value, 2)) {
     // display message error
-    errorMessages[0].innerHTML = "Nécéssite 2 caractères minimum";
-    // set border input to red
-    formInputs[0].style.border = "2px solid red"
+    displayErrorMessage(firstNameInput, "Nécéssite 2 caractères minimum");
+    // display border red
+    displayErrorBorder(firstNameInput);
     // don't validate form
     validation = false;
   }
 
   // check last name length
-  if (!checkValueLength(formInputs[1].value, 2)) {
-    errorMessages[1].innerHTML = "Nécéssite 2 caractères minimum";
-    formInputs[1].style.border = "2px solid red"
+  if (!checkValueLength(lastNameInput.value, 2)) {
+    displayErrorMessage(lastNameInput, "Nécéssite 2 caractères minimum");
+    displayErrorBorder(lastNameInput);
     validation = false;
   }
 
   // check email format
-  if (!checkEmailFormat(formInputs[2].value)) {
-    errorMessages[2].innerHTML = "Le format de l'email n'est pas valide";
-    formInputs[2].style.border = "2px solid red"
+  if (!checkEmailFormat(emailInput.value)) {
+    displayErrorMessage(emailInput, "Le format de l'email n'est pas valide");
+    displayErrorBorder(emailInput);
     validation = false;
   }
 
   //check date format
-  if (!checkDateFormat(formInputs[3].value)) {
-    errorMessages[3].innerHTML = "Le format de la date n'est pas valide";
-    formInputs[3].style.border = "2px solid red"
+  if (!checkDateFormat(birthdateInput.value)) {
+    displayErrorMessage(birthdateInput, "Le format de la date n'est pas valide");
+    displayErrorBorder(birthdateInput);
     validation = false;
   }
   // check date is past (it's a birthday)
-  else if (!checkDateIsPast(formInputs[3].value)) {
-    errorMessages[3].innerHTML = "Vous avez voyager dans le temps...";
-    formInputs[3].style.border = "2px solid red"
+  else if (!checkDateIsPast(birthdateInput.value)) {
+    displayErrorMessage(birthdateInput, "Vous avez voyager dans le temps...");
+    displayErrorBorder(birthdateInput);
     validation = false;
   }
 
   // check participations count is not empty
-  if (!checkValueLength(formInputs[4].value, 1)) {
-    errorMessages[4].innerHTML = "Nécéssite 1 caractères minimum";
-    formInputs[4].style.border = "2px solid red"
+  if (!checkValueLength(quantityInput.value, 1)) {
+    displayErrorMessage(quantityInput, "Nécéssite 1 caractères minimum");
+    displayErrorBorder(quantityInput);
     validation = false;
   }
   // check participations count is a number
   // and value > 0
-  if (isNaN(Number(formInputs[4].value))
-    || 0 > Number(formInputs[4].value)) {
-    errorMessages[4].innerHTML = "Valeur incorecte : un chiffre supérieur à 0 doit être renseigné";
-    formInputs[4].style.border = "2px solid red"
+  if (isNaN(Number(quantityInput.value))
+    || 0 > Number(quantityInput.value)) {
+    displayErrorMessage(quantityInput, "Valeur incorecte : un chiffre supérieur à 0 doit être renseigné");
+    displayErrorBorder(quantityInput);
     validation = false;
   }
 
   // check if one and only one radio btn is checked
   if (1 !== document.querySelectorAll('input[name="location"]:checked').length) {
-    errorMessages[5].innerHTML = "Veuillez selectionner un tournoi";
+    displayErrorMessage(
+      document.querySelector('input[name="location"]').parentElement.lastElementChild,
+      "Veuillez selectionner un tournoi"
+    );
     validation = false;
   }
 
   // check if conditions box is checked
   if (!document.getElementById('checkbox1').checked) {
-    errorMessages[6].innerHTML = "Veuillez accepter les conditions d'utilisation";
+    displayErrorMessage(
+      document.getElementById('checkbox1').parentNode,
+      "Veuillez accepter les conditions d'utilisation"
+    );
     validation = false;
   }
 
@@ -114,6 +124,18 @@ function validate() {
   return validation;
 }
 
+// display functions
+function displayErrorMessage(elt, message) {
+  let errorElt = document.createElement('span');
+  errorElt.classList = "error-message";
+  errorElt.innerHTML = message;
+  elt.after(errorElt);
+}
+
+// border red
+function displayErrorBorder(elt) {
+  elt.style.border = "2px solid red";
+}
 
 //check functions
 

@@ -148,8 +148,9 @@ main {
 
 form .error-message {
   display: block;
-  color: rgb(197, 9, 9);
-  font-size: 15px;
+  color: #e54858;
+  font-size: 14px;
+  margin-top: 2px;
 }
 
 .footer {
@@ -230,6 +231,7 @@ input {
   border-radius: 8px;
   font-size: 20px;
   height: 48px;
+  margin-bottom: 5px;
 }
 
 .formData[data-error]::after {
@@ -371,6 +373,10 @@ input[data-error]::after {
   color: #fff;
   cursor: pointer;
   border: 0;
+}
+
+.btn-submit {
+  margin-top: 10px;
 }
 
 /* custom select styles */

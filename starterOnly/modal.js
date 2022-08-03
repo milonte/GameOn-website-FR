@@ -35,7 +35,10 @@ closeModalBtn.addEventListener("click", () => {
 });
 
 // form validation check
-function validate() {
+function validate(event) {
+  // prevent reload page after form validation
+  event.preventDefault();
+
   // if error detected, return false
   let validation = true;
 

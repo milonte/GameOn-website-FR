@@ -9,9 +9,10 @@ function editNav() {
 
 // DOM Elements
 const modalbg = document.querySelector(".bground");
+const modalbgConfirm = document.querySelector(".bground-confirm");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
-const closeModalBtn = document.querySelector(".close");
+const closeModalBtn = document.querySelectorAll(".close-modal");
 const formInputs = document.querySelectorAll(".text-control");
 
 const firstNameInput = document.getElementById("first");
@@ -24,15 +25,22 @@ const quantityInput = document.getElementById("quantity");
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 
+// launch modal confirm
+function launchModalConfirm() {
+  modalbg.style.display = "none";
+  modalbgConfirm.style.display = "block";
+}
+
 // launch modal form
 function launchModal() {
   modalbg.style.display = "block";
 }
 
 // close modal when click on X
-closeModalBtn.addEventListener("click", () => {
+closeModalBtn.forEach((btn) => btn.addEventListener("click", () => {
   modalbg.style.display = "none";
-});
+  modalbgConfirm.style.display = "none";
+}));
 
 // form validation check
 function validate(event) {
@@ -124,6 +132,9 @@ function validate(event) {
 
   // return true and valid form if no errors
   // return false and don't valid form if error detected
+  if (validation) {
+    launchModalConfirm();
+  }
   return validation;
 }
 

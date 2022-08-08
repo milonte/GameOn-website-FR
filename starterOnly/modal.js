@@ -42,11 +42,22 @@ closeModalBtn.forEach((btn) => btn.addEventListener("click", () => {
 }));
 
 /**
+ * Allow body to scroll (set false when modal open)
+ * @param {bool} allow 
+ */
+function allowBodyScroll(allow) {
+  allow ?
+    document.querySelector('body').style.overflowY = "scroll"
+    : document.querySelector('body').style.overflowY = "hidden";
+}
+
+/**
  * Show modal
  * @param {HTMLElement} modal 
  */
 function launchModal(modal) {
   modal.style.display = "block";
+  allowBodyScroll(false);
 }
 
 /**
@@ -55,6 +66,7 @@ function launchModal(modal) {
  */
 function closeModal(modal) {
   modal.style.display = "none";
+  allowBodyScroll(true);
 }
 
 /**

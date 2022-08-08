@@ -179,17 +179,17 @@ function validate(event) {
     validation = false;
   }
 
-  // return true and valid form if no errors
-  // return false and don't valid form if error detected
   if (validation) {
     closeModal(modalbg);
     launchModal(modalbgConfirm);
   }
 
+  // return true and valid form if no errors
+  // return false and don't valid form if error detected
   return validation;
 }
 
-//check functions
+/* --- Checks functions ---*/
 
 /**
  * Check if value have minimum length

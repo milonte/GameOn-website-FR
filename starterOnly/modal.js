@@ -18,12 +18,14 @@ const modalbgConfirm = document.querySelector(".bground-confirm"); // confirmati
 const modalBtn = document.querySelectorAll(".modal-btn"); // Buttons to launch form modal
 const closeModalBtn = document.querySelectorAll(".close-modal"); // Buttons X to close modal
 
+const formDatas = document.querySelectorAll(".formData"); // All form datas
 const formInputs = document.querySelectorAll(".text-control"); // All inputs form
 const firstNameInput = document.getElementById("first"); // 1st form input (firstName)
 const lastNameInput = document.getElementById("last"); // 2nd form input (lastName)
 const emailInput = document.getElementById("email"); // 3rd form input (email)
 const birthdateInput = document.getElementById("birthdate"); // 4th form input (birthday)
 const quantityInput = document.getElementById("quantity"); // 5th form input (quantity)
+const conditionsCheckbox = document.getElementById('checkbox1') // conditions checkbox
 
 /* --- DOM functions --- */
 
@@ -56,30 +58,26 @@ function closeModal(modal) {
 }
 
 /**
- * Display error message after input
- * @param  {HTMLElement} elt - Display message will be display after this element
+ * Display error message & border error after input
+ * @param  {HTMLElement} input - Display message will be display after this element
  * @param  {string} message - Message to display
  * @return {void}
  */
-function displayErrorMessage(elt, message) {
-  let errorElt = document.createElement('span');
-  errorElt.classList = "error-message";
-  errorElt.innerHTML = message;
-  elt.after(errorElt);
+function displayError(form, message) {
+  form.setAttribute('data-error', message);
+  form.setAttribute("data-error-visible", "true");
+  form.removeAttribute("data-success");
 }
 
 /**
- * Draw input border
- * @param {HTMLInputElement} input - input to draw
- * @param {boolean} valid - true: green | false: red
+ * Remove error messages & display success border
+ * @param {HTMLElement} form 
  * @return {void}
  */
-function drawInputBorder(input, valid = false) {
-  if (valid) {
-    input.style.border = "3px solid green";
-  } else {
-    input.style.border = "3px solid red";
-  }
+function displaySuccess(form) {
+  form.removeAttribute('data-error');
+  form.removeAttribute("data-error-visible");
+  form.setAttribute("data-success", "true");
 }
 
 /* --- Form validation functions ---*/
@@ -98,82 +96,69 @@ function validate(event) {
   // if error detected, return false
   let validation = true;
 
-  // clear all errors messages before check
-  document.querySelectorAll(".error-message").forEach(elt => {
-    elt.parentNode.removeChild(elt);
-  })
-
   // draw all input borders in green (valid)
   // replace with red borders if invalid values
-  formInputs.forEach(input => {
-    drawInputBorder(input, true);
+  formDatas.forEach(elt => {
+    displaySuccess(elt);
   })
 
   // check first name length
   if (!checkMinimumLength(firstNameInput.value, 2)) {
     // display message error
-    displayErrorMessage(firstNameInput, "Nécéssite 2 caractères minimum");
-    // display border red
-    drawInputBorder(firstNameInput);
+    displayError(firstNameInput.parentElement, "Nécéssite 2 caractères minimum");
     // don't validate form
     validation = false;
   }
 
   // check last name length
   if (!checkMinimumLength(lastNameInput.value, 2)) {
-    displayErrorMessage(lastNameInput, "Nécéssite 2 caractères minimum");
-    drawInputBorder(lastNameInput);
+    displayError(lastNameInput.parentElement, "Nécéssite 2 caractères minimum");
     validation = false;
   }
 
   // check email format
   if (!checkEmailFormat(emailInput.value)) {
-    displayErrorMessage(emailInput, "Le format de l'email n'est pas valide");
-    drawInputBorder(emailInput);
+    displayError(emailInput.parentElement, "Le format de l'email n'est pas valide");
     validation = false;
   }
 
   //check date format
   if (!checkDateFormat(birthdateInput.value)) {
-    displayErrorMessage(birthdateInput, "Le format de la date n'est pas valide");
-    drawInputBorder(birthdateInput);
+    displayError(birthdateInput.parentElement, "Le format de la date n'est pas valide");
     validation = false;
   }
   // check date is past (it's a birthday)
   else if (!checkDateIsPast(birthdateInput.value)) {
-    displayErrorMessage(birthdateInput, "Vous avez voyager dans le temps...");
-    drawInputBorder(birthdateInput);
+    displayError(birthdateInput.parentElement, "Vous avez voyager dans le temps...");
     validation = false;
   }
 
   // check participations count is not empty
   if (!checkMinimumLength(quantityInput.value, 1)) {
-    displayErrorMessage(quantityInput, "Nécéssite 1 caractères minimum");
-    drawInputBorder(quantityInput);
+    displayError(quantityInput.parentElement, "Nécéssite 1 caractères minimum");
     validation = false;
   }
   // check participations count is a number
   // and value > 0
   if (isNaN(Number(quantityInput.value))
     || 0 > Number(quantityInput.value)) {
-    displayErrorMessage(quantityInput, "Valeur incorecte : un chiffre supérieur à 0 doit être renseigné");
-    drawInputBorder(quantityInput);
+    displayError(quantityInput.parentElement, "Valeur incorecte : un chiffre supérieur à 0 doit être renseigné");
     validation = false;
   }
 
   // check if one and only one radio btn is checked
   if (1 !== document.querySelectorAll('input[name="location"]:checked').length) {
-    displayErrorMessage(
-      document.querySelector('input[name="location"]').parentElement.lastElementChild,
+    displayError(
+      document.querySelector('input[name="location"]').parentElement,
       "Veuillez selectionner un tournoi"
     );
     validation = false;
   }
 
   // check if conditions box is checked
-  if (!document.getElementById('checkbox1').checked) {
-    displayErrorMessage(
-      document.getElementById('checkbox1').parentNode,
+  if (!conditionsCheckbox.checked) {
+    displayError(
+      conditionsCheckbox.parentElement,
       "Veuillez accepter les conditions d'utilisation"
     );
     validation = false;

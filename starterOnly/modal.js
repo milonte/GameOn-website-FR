@@ -1,11 +1,16 @@
 /* -----  NAVBAR  ------ */
 
 function editNav() {
-  var nav = document.getElementById("myTopnav");
-  if (nav.className === "topnav") {
-    nav.className += " responsive";
+  var navLinks = document.querySelector('.responsive');
+  if (navLinks.classList.contains("hide-responsive")) {
+    navLinks.classList.add("show-responsive");
+    navLinks.classList.remove("hide-responsive");
+  } else if (navLinks.classList.contains("show-responsive")) {
+    navLinks.classList.add("hide-responsive");
+    navLinks.classList.remove("show-responsive");
+    setTimeout(() => { navLinks.classList.remove('hide-responsive') }, 500);
   } else {
-    nav.className = "topnav";
+    navLinks.classList.add("show-responsive");
   }
 }
 

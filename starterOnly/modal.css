@@ -17,6 +17,7 @@ body {
   margin: 0 20px;
   display: flex;
   flex-direction: column;
+  height: 100vh;
   background-image: url("background.png");
   font-family: var(--font-default);
   font-size: 18px;
@@ -109,6 +110,7 @@ img {
 /* ---- MAIN ---- */
 
 main {
+  flex: 1 1 auto;
   font-weight: bolder;
   color: black;
   padding-top: 30px;
@@ -561,7 +563,7 @@ footer {
 @media screen and (max-width: 800px) {
 
   main {
-    margin-top: 50px;
+    padding-top: 0;
   }
 
   .topnav {
@@ -604,38 +606,17 @@ footer {
 
   .topnav .hide-responsive {
     right: -800px;
-    animation: navbar-fadeout .5s ease-in-out;
+    animation: navbar-fadeout-right .5s ease-in-out;
   }
 
   .topnav .show-responsive {
     right: 0;
-    animation: navbar-fadein .5s ease-in-out;
+    animation: navbar-fadein-right .5s ease-in-out;
   }
 
   .header-logo img {
     width: 140px;
     margin-left: 20px;
-  }
-
-  @keyframes navbar-fadein {
-    from {
-      right: -800px;
-    }
-
-    to {
-      right: 0;
-    }
-  }
-
-  @keyframes navbar-fadeout {
-
-    from {
-      right: 0;
-    }
-
-    to {
-      right: -800px;
-    }
   }
 
   .content {
@@ -708,6 +689,34 @@ footer {
 
 }
 
+@media screen and (max-width: 620px) {
+  .topnav .responsive {
+    margin-top: 100px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-bottom: 3px solid #fe142f;
+    flex-wrap: wrap;
+    right: 0;
+    top: -600px;
+  }
+
+  .topnav .hide-responsive {
+    top: -600px;
+    animation: navbar-fadeout-top .5s ease-in-out;
+  }
+
+  .topnav .show-responsive {
+    top: 0;
+    animation: navbar-fadein-top .5s ease-in-out;
+  }
+
+  .topnav .responsive a {
+    flex: 45%;
+    min-width: 200px;
+    justify-content: center;
+  }
+}
+
 @keyframes modalopen {
   from {
     opacity: 0;
@@ -719,18 +728,44 @@ footer {
   }
 }
 
-@media screen and (max-width: 620px) {
-  .topnav .responsive {
-    margin-top: 100px;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-bottom: 3px solid #fe142f;
-    flex-wrap: wrap;
+@keyframes navbar-fadein-right {
+  from {
+    right: -800px;
   }
 
-  .topnav .responsive a {
-    flex: 45%;
-    min-width: 200px;
-    justify-content: center;
+  to {
+    right: 0;
+  }
+}
+
+@keyframes navbar-fadeout-right {
+
+  from {
+    right: 0;
+  }
+
+  to {
+    right: -800px;
+  }
+}
+
+@keyframes navbar-fadein-top {
+  from {
+    top: -600px;
+  }
+
+  to {
+    top: 0px;
+  }
+}
+
+@keyframes navbar-fadeout-top {
+
+  from {
+    top: 0px;
+  }
+
+  to {
+    top: -600px;
   }
 }

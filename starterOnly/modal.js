@@ -181,6 +181,8 @@ function validate(event) {
     validation = false;
   }
 
+  // if form is valid
+  // close form modal & open confirm message modal
   if (validation) {
     closeModal(modalbg);
     launchModal(modalbgConfirm);
@@ -225,7 +227,7 @@ function checkDateFormat(value) {
 /**
  * Check if date is in past
  * @param {string} value 
- * @returns 
+ * @returns {bool}
  */
 function checkDateIsPast(value) {
   const today = Date();

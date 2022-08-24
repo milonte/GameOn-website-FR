@@ -23,6 +23,7 @@ const modalbgConfirm = document.querySelector(".bground-confirm"); // confirmati
 const modalBtn = document.querySelectorAll(".modal-btn"); // Buttons to launch form modal
 const closeModalBtn = document.querySelectorAll(".close-modal"); // Buttons X to close modal
 
+const form = document.querySelector("form");
 const formDatas = document.querySelectorAll(".formData"); // All form datas
 const formInputs = document.querySelectorAll(".text-control"); // All inputs form
 const firstNameInput = document.getElementById("first"); // 1st form input (firstName)
@@ -33,6 +34,9 @@ const quantityInput = document.getElementById("quantity"); // 5th form input (qu
 const conditionsCheckbox = document.getElementById('checkbox1') // conditions checkbox
 
 /* --- DOM functions --- */
+
+// reset modal form on page reload
+form.reset();
 
 // launch modal event on click on modal btn
 modalBtn.forEach(
@@ -92,7 +96,6 @@ function displayError(form, message) {
  * @return {void}
  */
 function displaySuccess(form) {
-  console.log(form)
   form.removeAttribute('data-error');
   form.removeAttribute("data-error-visible");
   form.setAttribute("data-success", "true");
@@ -213,7 +216,7 @@ function checkMinimumLength(value, length) {
  */
 function checkEmailFormat(value) {
   // source https://www.w3docs.com/snippets/javascript/how-to-validate-an-e-mail-using-javascript.html
-  return (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value));
+  return (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(value));
 }
 
 /**
@@ -222,6 +225,7 @@ function checkEmailFormat(value) {
  * @returns {bool}
  */
 function checkDateFormat(value) {
+  console.log(Date.parse(value))
   return !isNaN(Date.parse(value));
 }
 

@@ -92,6 +92,7 @@ function displayError(form, message) {
  * @return {void}
  */
 function displaySuccess(form) {
+  console.log(form)
   form.removeAttribute('data-error');
   form.removeAttribute("data-error-visible");
   form.setAttribute("data-success", "true");
@@ -103,7 +104,7 @@ function displaySuccess(form) {
  * Form validation function
  * Return true (and valid form send) if no errors detected
  * Return false & display error messages if errors detected
- * @param {Event} event 
+ * @param {SubmitEvent} event 
  * @returns {boolean}
  */
 function validate(event) {

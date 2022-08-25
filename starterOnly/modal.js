@@ -31,6 +31,7 @@ const lastNameInput = document.getElementById("last"); // 2nd form input (lastNa
 const emailInput = document.getElementById("email"); // 3rd form input (email)
 const birthdateInput = document.getElementById("birthdate"); // 4th form input (birthday)
 const quantityInput = document.getElementById("quantity"); // 5th form input (quantity)
+const locationCheckboxInputs = document.querySelectorAll('.checkbox-input'); // Locations Checkboxs
 const conditionsCheckbox = document.getElementById('checkbox1') // conditions checkbox
 
 /* --- DOM functions --- */
@@ -101,7 +102,145 @@ function displaySuccess(form) {
   form.setAttribute("data-success", "true");
 }
 
-/* --- Form validation functions ---*/
+/* --- Checks functions ---*/
+
+// check all text inputs
+formInputs.forEach(input => {
+  input.addEventListener('input', event => {
+    isValid(event.target.id)
+  })
+})
+
+// check all location radio inputs
+locationCheckboxInputs.forEach(radio => {
+  radio.addEventListener('change', () => {
+    isValid('location');
+  })
+});
+
+// check conditions checkbox input
+conditionsCheckbox.addEventListener('change', () => {
+  isValid(conditionsCheckbox.id);
+});
+
+
+/* -- Inputs checks -- */
+
+/**
+ * Inputs validation functions
+ * @param {string} inputName - Name of input (usualy ID of input)
+ * @returns {bool} - Input is valid
+ */
+function isValid(inputName) {
+
+  switch (inputName) {
+
+    // FirstName Input
+    case 'first': {
+      // check first name length
+      if (!hasMinimimLength(firstNameInput.value, 2)) {
+        displayError(firstNameInput.parentElement, "Nécéssite 2 caractères minimum");
+        return false;
+      } else {
+        displaySuccess(firstNameInput.parentElement);
+        return true;
+      }
+    }
+
+    // LastName Input
+    case 'last': {
+      // check last name length
+      if (!hasMinimimLength(lastNameInput.value, 2)) {
+        displayError(lastNameInput.parentElement, "Nécéssite 2 caractères minimum");
+        return false;
+      } else {
+        displaySuccess(lastNameInput.parentElement);
+        return true;
+      }
+    }
+
+    // Email Input
+    case 'email': {
+      // check email format
+      if (!isEmail(emailInput.value)) {
+        displayError(emailInput.parentElement, "Le format de l'email n'est pas valide");
+        return false;
+      } else {
+        displaySuccess(emailInput.parentElement);
+        return true;
+      }
+
+    }
+
+    // BirthDate Input
+    case 'birthdate': {
+      //check date format
+      if (!isDate(birthdateInput.value)) {
+        displayError(birthdateInput.parentElement, "Le format de la date n'est pas valide");
+        return false;
+      }
+      // check date is past (it's a birthday)
+      else if (!isDatePast(birthdateInput.value)) {
+        displayError(birthdateInput.parentElement, "Vous avez voyager dans le temps...");
+        return false;
+      } else {
+        displaySuccess(birthdateInput.parentElement);
+        return true;
+      }
+    }
+
+    // Participations Quantity Input
+    case 'quantity': {
+      // check participations count is not empty
+      if (!hasMinimimLength(quantityInput.value, 1)) {
+        displayError(quantityInput.parentElement, "Nécéssite 1 caractères minimum");
+        return false;
+      }
+      // check participations count is a number
+      // and value > 0
+      if (isNaN(Number(quantityInput.value))
+        || 0 > Number(quantityInput.value)) {
+        displayError(quantityInput.parentElement, "Valeur incorecte : un chiffre supérieur à 0 doit être renseigné");
+        return false;
+      } else {
+        displaySuccess(quantityInput.parentElement);
+        return true;
+      }
+    }
+
+    // Location Inputs
+    case 'location': {
+      // check if one and only one radio btn is checked
+      if (1 !== document.querySelectorAll('input[name="location"]:checked').length) {
+        displayError(
+          document.querySelector('input[name="location"]').parentElement,
+          "Veuillez selectionner un tournoi"
+        );
+        return false;
+      } else {
+        displaySuccess(document.querySelector('input[name="location"]').parentElement);
+        return true;
+      }
+    }
+
+    // Conditions agree Input
+    case 'checkbox1': {
+      // check if conditions box is checked
+      if (!conditionsCheckbox.checked) {
+        displayError(
+          conditionsCheckbox.parentElement,
+          "Veuillez accepter les conditions d'utilisation"
+        );
+        return false;
+      } else {
+        displaySuccess(conditionsCheckbox.parentElement);
+        return true;
+      }
+    }
+  }
+}
+
+/* -- Form validation checks --*/
 
 /**
  * Form validation function
@@ -114,76 +253,23 @@ function validate(event) {
   // prevent reload page after form validation
   event.preventDefault();
 
-  // if error detected, return false
+  // if no errors, can send form
   let validation = true;
 
-  // draw all input borders in green (valid)
-  // replace with red borders if invalid values
-  formDatas.forEach(elt => {
-    displaySuccess(elt);
+  // on submit, verify all inputs
+  // if error detected, set validation to false
+  // and don"t send form
+
+  // all text control inputs
+  formInputs.forEach(input => {
+    if (!isValid(input.id)) { validation = false }
   })
 
-  // check first name length
-  if (!checkMinimumLength(firstNameInput.value, 2)) {
-    // display message error
-    displayError(firstNameInput.parentElement, "Nécéssite 2 caractères minimum");
-    // don't validate form
-    validation = false;
-  }
+  // all locations radios inputs
+  if (!isValid('location')) { validation = false }
 
-  // check last name length
-  if (!checkMinimumLength(lastNameInput.value, 2)) {
-    displayError(lastNameInput.parentElement, "Nécéssite 2 caractères minimum");
-    validation = false;
-  }
-
-  // check email format
-  if (!checkEmailFormat(emailInput.value)) {
-    displayError(emailInput.parentElement, "Le format de l'email n'est pas valide");
-    validation = false;
-  }
-
-  //check date format
-  if (!checkDateFormat(birthdateInput.value)) {
-    displayError(birthdateInput.parentElement, "Le format de la date n'est pas valide");
-    validation = false;
-  }
-  // check date is past (it's a birthday)
-  else if (!checkDateIsPast(birthdateInput.value)) {
-    displayError(birthdateInput.parentElement, "Vous avez voyager dans le temps...");
-    validation = false;
-  }
-
-  // check participations count is not empty
-  if (!checkMinimumLength(quantityInput.value, 1)) {
-    displayError(quantityInput.parentElement, "Nécéssite 1 caractères minimum");
-    validation = false;
-  }
-  // check participations count is a number
-  // and value > 0
-  if (isNaN(Number(quantityInput.value))
-    || 0 > Number(quantityInput.value)) {
-    displayError(quantityInput.parentElement, "Valeur incorecte : un chiffre supérieur à 0 doit être renseigné");
-    validation = false;
-  }
-
-  // check if one and only one radio btn is checked
-  if (1 !== document.querySelectorAll('input[name="location"]:checked').length) {
-    displayError(
-      document.querySelector('input[name="location"]').parentElement,
-      "Veuillez selectionner un tournoi"
-    );
-    validation = false;
-  }
-
-  // check if conditions box is checked
-  if (!conditionsCheckbox.checked) {
-    displayError(
-      conditionsCheckbox.parentElement,
-      "Veuillez accepter les conditions d'utilisation"
-    );
-    validation = false;
-  }
+  // conditions input
+  if (!isValid(conditionsCheckbox.id)) { validation = false }
 
   // if form is valid
   // close form modal & open confirm message modal
@@ -197,7 +283,7 @@ function validate(event) {
   return validation;
 }
 
-/* --- Checks functions ---*/
+/* -- Common checks -- */
 
 /**
  * Check if value have minimum length
@@ -205,7 +291,7 @@ function validate(event) {
  * @param {int} length - minimum length wanted
  * @returns {bool}
  */
-function checkMinimumLength(value, length) {
+function hasMinimimLength(value, length) {
   return length <= value.length;
 }
 
@@ -214,7 +300,7 @@ function checkMinimumLength(value, length) {
  * @param {string} value - string to check format
  * @returns {bool}
  */
-function checkEmailFormat(value) {
+function isEmail(value) {
   // source https://www.w3docs.com/snippets/javascript/how-to-validate-an-e-mail-using-javascript.html
   return (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(value));
 }
@@ -224,8 +310,7 @@ function checkEmailFormat(value) {
  * @param {string} value - Date
  * @returns {bool}
  */
-function checkDateFormat(value) {
-  console.log(Date.parse(value))
+function isDate(value) {
   return !isNaN(Date.parse(value));
 }
 
@@ -234,7 +319,7 @@ function checkDateFormat(value) {
  * @param {string} value 
  * @returns {bool}
  */
-function checkDateIsPast(value) {
+function isDatePast(value) {
   const today = Date();
   return Date.parse(today) > Date.parse(value);
 }

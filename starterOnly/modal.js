@@ -1,23 +1,7 @@
-/* -----  NAVBAR  ------ */
-
-function editNav() {
-  var navLinks = document.querySelector('.responsive');
-  if (navLinks.classList.contains("hide-responsive")) {
-    navLinks.classList.add("show-responsive");
-    navLinks.classList.remove("hide-responsive");
-  } else if (navLinks.classList.contains("show-responsive")) {
-    navLinks.classList.add("hide-responsive");
-    navLinks.classList.remove("show-responsive");
-    setTimeout(() => { navLinks.classList.remove('hide-responsive') }, 500);
-  } else {
-    navLinks.classList.add("show-responsive");
-  }
-}
-
-
-/* -----  MODAL  ------ */
-
 /* --- DOM elements --- */
+const responsiveLink = document.getElementById('responsive-link'); // responsive bars btn
+const navLinks = document.querySelector('.responsive'); // navigation links
+
 const modalbg = document.querySelector(".bground"); // form modal
 const modalbgConfirm = document.querySelector(".bground-confirm"); // confirmation modal
 const modalBtn = document.querySelectorAll(".modal-btn"); // Buttons to launch form modal
@@ -34,7 +18,25 @@ const quantityInput = document.getElementById("quantity"); // 5th form input (qu
 const locationCheckboxInputs = document.querySelectorAll('.checkbox-input'); // Locations Checkboxs
 const conditionsCheckbox = document.getElementById('checkbox1') // conditions checkbox
 
-/* --- DOM functions --- */
+/* -----  NAVBAR  ------ */
+
+// show / hide navigation links on click on bars btn
+responsiveLink.addEventListener('click', () => {
+
+  if (navLinks.classList.contains("hide-responsive")) {
+    navLinks.classList.add("show-responsive");
+    navLinks.classList.remove("hide-responsive");
+  } else if (navLinks.classList.contains("show-responsive")) {
+    navLinks.classList.add("hide-responsive");
+    navLinks.classList.remove("show-responsive");
+    setTimeout(() => { navLinks.classList.remove('hide-responsive') }, 500);
+  } else {
+    navLinks.classList.add("show-responsive");
+  }
+})
+
+
+/* -----  MODAL  ------ */
 
 // reset modal form on page reload
 form.reset();
@@ -255,7 +257,7 @@ function isValid(inputName) {
  * @param {SubmitEvent} event 
  * @returns {boolean}
  */
-function validate(event) {
+form.addEventListener("submit", event => {
   // prevent reload page after form validation
   event.preventDefault();
 
@@ -287,7 +289,7 @@ function validate(event) {
   // return true and valid form if no errors
   // return false and don't valid form if error detected
   return validation;
-}
+});
 
 /* -- Common checks -- */
 

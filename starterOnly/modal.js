@@ -141,6 +141,9 @@ function isValid(inputName) {
       if (!hasMinimimLength(firstNameInput.value, 2)) {
         displayError(firstNameInput.parentElement, "Nécéssite 2 caractères minimum");
         return false;
+      } else if (!isName(firstNameInput.value)) {
+        displayError(firstNameInput.parentElement, "Le format du prénom n'est pas valide");
+        return false;
       } else {
         displaySuccess(firstNameInput.parentElement);
         return true;
@@ -152,6 +155,9 @@ function isValid(inputName) {
       // check last name length
       if (!hasMinimimLength(lastNameInput.value, 2)) {
         displayError(lastNameInput.parentElement, "Nécéssite 2 caractères minimum");
+        return false;
+      } else if (!isName(lastNameInput.value)) {
+        displayError(lastNameInput.parentElement, "Le format du prénom n'est pas valide");
         return false;
       } else {
         displaySuccess(lastNameInput.parentElement);
@@ -293,6 +299,16 @@ function validate(event) {
  */
 function hasMinimimLength(value, length) {
   return length <= value.length;
+}
+
+/**
+ * Check name format
+ * @param {string} value 
+ * @returns 
+ */
+function isName(value) {
+  // source https://stackoverflow.com/questions/275160/regex-for-names#2044909
+  return (/^[a-zA-Z][a-zA-Z '&-]*[A-Za-z]$/.test(value));
 }
 
 /**
